@@ -24,6 +24,30 @@ $config = [
 
     // An authentication source which can authenticate against both SAML 2.0
     // and Shibboleth 1.3 IdPs.
+    'proyecto' => [
+        'saml:SP',
+
+        // The entity ID of this SP.
+        // Can be NULL/unset, in which case an entity ID is generated based on the metadata URL.
+        'entityID' => "https://datacenter.ucol.mx/proyecto/",
+
+        // The entity ID of the IdP this SP should contact.
+        // Can be NULL/unset, in which case the user will be shown a list of available IdPs.
+        'idp' => "http://wayf.ucol.mx",
+
+        // The URL to the discovery service.
+        // Can be NULL/unset, in which case a builtin discovery service will be used.
+        'discoURL' => null,
+	    'certificate' => 'localhost.crt',
+            'privatekey' => 'localhost.key',
+
+            // All communications are encrypted and signed
+            'redirect.sign' => TRUE,
+            //'redirect.validate' => TRUE,
+            //'assertion.encryption' => TRUE,
+	     'name'=>'Proyecto demo',
+    ],
+
     'default-sp' => [
         'saml:SP',
 
