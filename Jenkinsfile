@@ -13,7 +13,7 @@ pipeline {
 
     stage('Checkout Source') { 
       steps {
-        git credentialsId: 'demo_github', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
+        git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
       }
     }
 
@@ -68,7 +68,7 @@ pipeline {
 
    stage('Restarting POD'){
    steps{
-    sshagent(['rodriguezssh'])
+    sshagent(['sshsanchez'])
     {
      sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
       script{
