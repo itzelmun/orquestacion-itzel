@@ -19,7 +19,7 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: /servicio
+        path: /DELL
         backend:
           service:
             name: phpmyadmin-service
