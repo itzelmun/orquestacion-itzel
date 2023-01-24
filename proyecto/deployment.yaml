@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proyecto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proyecto
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: proyecto
+        role: proyecto
+    spec:
+      containers:
+        - name: proyecto
+          image: itzelmunguia/proyecto:itz
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: proyecto
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proyecto
+  labels:
+    app: proyecto
+spec:
+  selector:
+   app: proyecto
+  type: ClusterIP
+  ports:
+   - name: http
+     port: 80
+     protocol: TCP
+     targetPort: 80
+  selector:
+    role: proyecto
+
+
