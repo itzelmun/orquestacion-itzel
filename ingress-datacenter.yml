@@ -19,7 +19,7 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: /serviciop
+        path: /admin
         backend:
           service:
             name: phpmyadmin-service
@@ -41,7 +41,6 @@ spec:
             name: proyecto
             port:
               number: 80
-          
 
 
   - host: "pre-datacenter.ucol.mx"
