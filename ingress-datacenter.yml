@@ -19,7 +19,7 @@ spec:
     http:
       paths:
       - pathType: Prefix
-        path: /servicio
+        path: /serviciop
         backend:
           service:
             name: phpmyadmin-service
