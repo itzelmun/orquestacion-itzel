@@ -26,6 +26,7 @@ spec:
             - containerPort: 80
               name: proyecto
 
+
 ---
 apiVersion: v1
 kind: Service
