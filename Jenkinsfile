@@ -13,7 +13,7 @@ pipeline {
 
     stage('Checkout Source') { 
       steps {
-        git credentialsId: 'demo_github', url: '', branch:'main'
+        git credentialsId: 'demo_github', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
       }
     }
 
