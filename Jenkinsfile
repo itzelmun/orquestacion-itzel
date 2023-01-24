@@ -36,13 +36,13 @@ pipeline {
 
     stage('Pushing Image') {
       environment {
-               registryCredential = 'dockerhubhaep'
+               registryCredential = 'dockerhubitz'
            }
       steps{
 	dir('proyecto') {
         script {
           docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage1.push("haep")
+            dockerImage1.push("itz")
           }
         }
       }
@@ -50,7 +50,7 @@ pipeline {
         dir('phpmyadmin') {
         script {
           docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage2.push("haep")
+            dockerImage2.push("itz")
           }
         }
       }
@@ -60,7 +60,7 @@ pipeline {
    //stage('Deploying App to Kubernetes') {
    //  steps {
    //    script {
-   //      //kubernetesDeploy(configs: "deployment-service-simplesaml.yaml", kubeconfigId: "kuberhaep")
+   //      //kubernetesDeploy(configs: "deployment-service-simplesaml.yaml", kubeconfigId: "kuberkey")
    //       //sh 'microk8s.kubectl rollout restart prueba-gha'
    //     }        
    //   }
