@@ -32,7 +32,7 @@ spec:
           service:
             name: proyecto
             port:
-              number: 443
+              number: 80
 
       - pathType: Prefix
         path: /simplesaml
@@ -40,7 +40,7 @@ spec:
           service:
             name: proyecto
             port:
-              number: 443
+              number: 80
 
 
   - host: "pre-datacenter.ucol.mx"
