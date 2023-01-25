@@ -51,7 +51,7 @@ $config = [
          * need to compute the right URLs yourself and pass them dynamically
          * to SimpleSAMLphp's API.
          */
-        'baseURL' => 'https://datacenter.ucol.mx/proyecto',
+        'baseURL' => 'https://datacenter.ucol.mx/simplesaml',
     ],
 
     /*
