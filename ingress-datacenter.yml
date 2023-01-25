@@ -43,6 +43,31 @@ spec:
               number: 80
 
 
+      - pathType: Prefix
+        path: /admin2
+        backend:
+          service:
+            name: phpmyadmin-service2
+            port:
+              number: 80
+
+      - pathType: Prefix
+        path: /proyecto2
+        backend:
+          service:
+            name: proyecto2
+            port:
+              number: 80
+
+      - pathType: Prefix
+        path: /simplesaml2
+        backend:
+          service:
+            name: proyecto2
+            port:
+              number: 80
+
+
   - host: "pre-datacenter.ucol.mx"
     http:
       paths:
