@@ -1,4 +1,4 @@
-<?php
+l<?php
 
 /**
  * The configuration of SimpleSAMLphp
@@ -199,7 +199,7 @@ $config = [
      * https://idp.example.org/ssp/, then
      * http://idp.example.org/ssp/module.php/core/postredirect.php must be accessible.
      */
-    'enable.http_post' => false,
+    'enable.http_post' => true,
 
     /*
      * Set the allowed clock skew between encrypting/decrypting assertions
