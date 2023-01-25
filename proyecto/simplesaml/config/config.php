@@ -5,8 +5,8 @@ l<?php
  */
 
 
-$https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : getenv('https');
-
+/*$https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : getenv('https');
+*/
 $config = [
 
     /*******************************
