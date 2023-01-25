@@ -4,6 +4,9 @@ l<?php
  * The configuration of SimpleSAMLphp
  */
 
+
+$https = isset($_SERVER['HTTPS']) ? $_SERVER['HTTPS'] : getenv('https');
+
 $config = [
 
     /*******************************
