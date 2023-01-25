@@ -25,9 +25,9 @@ switch ($_SERVER['PATH_INFO']) {
         /** @var array $certInfo */
         $certInfo = SimpleSAML\Utils\Crypto::loadPublicKey($idpmeta, true);
         break;
-    case '/http.crt':
+    case '/https.crt':
         /** @var array $certInfo */
-        $certInfo = SimpleSAML\Utils\Crypto::loadPublicKey($idpmeta, true, 'http.');
+        $certInfo = SimpleSAML\Utils\Crypto::loadPublicKey($idpmeta, true, 'https.');
         break;
     default:
         throw new \SimpleSAML\Error\NotFound('Unknown certificate.');
