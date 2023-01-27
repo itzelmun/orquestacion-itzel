@@ -2,7 +2,7 @@ pipeline {
 
   environment {
     dockerimagename1 = "itzelmunguia/proyecto:itz"
-    dockerimagename2 = "itzelmunguia/phpmyadmin:itz2"
+    dockerimagename2 = "itzelmunguia/phpmyadmin:itz"
     dockerImage1 = ""
     dockerImage2= ""
   }
@@ -50,7 +50,7 @@ pipeline {
         dir('phpmyadmin') {
         script {
           docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage2.push("itz2")
+            dockerImage2.push("itz")
           }
         }
       }
