@@ -4,7 +4,7 @@ metadata:
   name: mysql-secrets
 type: Opaque
 data:
-  root-password: ZXN0YS1lcy1taS1jb250cmFzZcOxYS1zZWd1cmEtcGFyYS1teXNxbA==
+  root-password: c3VwZXItc2VjcmV0LXBhc3N3b3JkCg==
 
 ---
 apiVersion: apps/v1
