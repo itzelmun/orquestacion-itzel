@@ -5,7 +5,7 @@ metadata:
   name: mysql-secrets
 type: Opaque
 data:
-  ROOT_PASSWORD: c3VwZXItc2VjcmV0LXBhc3N3b3Jk
+  ROOT_PASSWORD: ZXN0YS1lcy1taS1jb250cmFzZcOxYS1zZWd1cmEtcGFyYS1teXNxbA==
 
 ---
 
