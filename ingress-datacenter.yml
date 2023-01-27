@@ -13,6 +13,7 @@ spec:
  - hosts:
    - datacenter.ucol.mx
    - pre-datacenter.ucol.mx
+   - hector.ucol.mx
    secretName: microbot-ingress-tls
  rules:
   - host: "datacenter.ucol.mx"
