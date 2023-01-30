@@ -4,7 +4,7 @@ metadata:
   name: mysql-secreto-itzel
 type: Opaque
 data:
-  root-password: c3VwZXItc2VjcmV0LXBhc3N3b3JkCg==
+  root-password: bWktY29udHJhc2XDsWEtc2VjcmV0YQ==
 
 ---
 apiVersion: apps/v1
