@@ -12,19 +12,19 @@ kind: Deployment
 metadata:
   name: phpmyadmin-deployment-itzel
   labels:
-    app: phpmyadmin-itzel
+    app: phpmyadmin-deployment-itzel
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: phpmyadmin-itzel
+      app: phpmyadmin-deployment-itzel
   template:
     metadata:
       labels:
-        app: phpmyadmin-itzel
+        app: phpmyadmin-deployment-itzel
     spec:
       containers:
-        - name: phpmyadmin-itzel
+        - name: phpmyadmin-deployment-itzel
           image: itzelmunguia/phpmyadmin:itz
           imagePullPolicy: Always
           ports:
@@ -48,7 +48,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: phpmyadmin-itzel
+    app: phpmyadmin-service-itzel
   ports:
   - protocol: TCP
     port: 80

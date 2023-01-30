@@ -31,14 +31,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql-itzel
+      app: mysql-deployment-itzel
   template:
     metadata:
       labels:
-        app: mysql-itzel
+        app: mysql-deployment-itzel
     spec:
       containers:
-        - name: mysql-itzel
+        - name: mysql-deployment-itzel
           image: mysql:5.7
           ports:
             - containerPort: 3306
@@ -64,7 +64,7 @@ metadata:
   name: mysql-service-itzel
 spec:
   selector:
-    app: mysql-itzel
+    app: mysql-service-itzel
   ports:
   - protocol: TCP
     port: 3306
