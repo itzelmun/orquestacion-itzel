@@ -4,7 +4,7 @@ metadata:
   name: mysql-secreto-itzel
 type: Opaque
 data:
-  root-password: bWktY29udHJhc2XDsWEtc2VndXJh
+  ROOT_PASSWORD: bWktY29udHJhc2XDsWEtc2VndXJh
 
 ---
 apiVersion: apps/v1
@@ -12,7 +12,7 @@ kind: Deployment
 metadata:
   name: phpmyadmin-deployment-itzel
   labels:
-    app: phpmyadmin-deployment-itzel
+    app: phpmyadmin-itzel
 spec:
   replicas: 1
   selector:
@@ -38,7 +38,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: mysql-secreto-itzel
-                  key: root-password
+                  key: ROOT_PASSWORD
 
 ---
 apiVersion: v1
