@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proyecto-itzel
+  name: proyecto-deployment-itzel
 spec:
   replicas: 1
   selector:
@@ -31,7 +31,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: proyecto-itzel
+  name: proyecto-service-itzel
   labels:
     app: proyecto-itzel
 spec:
