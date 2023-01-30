@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-secrets
+  name: mysql-secreto-itzel
 type: Opaque
 data:
   ROOT_PASSWORD: c3VwZXItc2VjcmV0LXBhc3N3b3JkCg==
@@ -12,7 +12,7 @@ data:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-data-disk
+  name: mysql-disco-itzel
 spec:
   accessModes:
     - ReadWriteOnce
@@ -24,47 +24,47 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql-itzel
   labels:
-    app: mysql-deployment
+    app: mysql-itzel
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: mysql-itzel
   template:
     metadata:
       labels:
-        app: mysql
+        app: mysql-itzel
     spec:
       containers:
-        - name: mysql
+        - name: mysql-itzel
           image: mysql:5.7
           ports:
             - containerPort: 3306
           volumeMounts:
             - mountPath: "/var/lib/mysql"
               subPath: "mysql"
-              name: mysql-data-disk
+              name: mysql-disco-itzel
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
+                  name: mysql-secreto-itzel
                   key: ROOT_PASSWORD
       volumes:
-        - name: mysql-data-disk
+        - name: mysql-disco-itzel
           persistentVolumeClaim:
-            claimName: mysql-data-disk
+            claimName: mysql-disco-itzel
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: mysql-service-itzel
 spec:
   selector:
-    app: mysql
+    app: mysql-itzel
   ports:
   - protocol: TCP
     port: 3306

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-secrets
+  name: mysql-secreto-itzel
 type: Opaque
 data:
   root-password: c3VwZXItc2VjcmV0LXBhc3N3b3JkCg==
@@ -10,45 +10,45 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phpmyadmin-deployment
+  name: phpmyadmin-deployment-itzel
   labels:
-    app: phpmyadmin
+    app: phpmyadmin-itzel
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: phpmyadmin
+      app: phpmyadmin-itzel
   template:
     metadata:
       labels:
-        app: phpmyadmin
+        app: phpmyadmin-itzel
     spec:
       containers:
-        - name: phpmyadmin
+        - name: phpmyadmin-itzel
           image: itzelmunguia/phpmyadmin:itz
           imagePullPolicy: Always
           ports:
             - containerPort: 80
           env:
             - name: PMA_HOST
-              value: mysql-service
+              value: mysql-service-itzel
             - name: PMA_PORT
               value: "3306"
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
+                  name: mysql-secreto-itzel
                   key: root-password
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: phpmyadmin-service
+  name: phpmyadmin-service-itzel
 spec:
   type: ClusterIP
   selector:
-    app: phpmyadmin
+    app: phpmyadmin-itzel
   ports:
   - protocol: TCP
     port: 80

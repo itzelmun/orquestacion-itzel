@@ -1,12 +1,12 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: proyecto
+  name: proyect-itzelo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: proyecto
+      app: proyecto-itzel
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -15,28 +15,28 @@ spec:
   template:
     metadata:
       labels:
-        app: proyecto
-        role: proyecto
+        app: proyecto-itzel
+        role: proyecto-itzel
     spec:
       containers:
-        - name: proyecto
+        - name: proyecto-itzel
           image: itzelmunguia/proyecto:itz
           imagePullPolicy: Always
           ports:
             - containerPort: 80
-              name: proyecto
+              name: proyecto-itzel
 
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: proyecto
+  name: proyecto-itzel
   labels:
-    app: proyecto
+    app: proyecto-itzel
 spec:
   selector:
-   app: proyecto
+   app: proyecto-itzel
   type: ClusterIP
   ports:
    - name: http
@@ -44,6 +44,6 @@ spec:
      protocol: TCP
      targetPort: 80
   selector:
-    role: proyecto
+    role: proyecto-itzel
 
 

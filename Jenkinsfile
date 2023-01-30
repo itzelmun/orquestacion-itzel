@@ -74,8 +74,8 @@ pipeline {
       script{
         try{
            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment proyecto --kubeconfig=/home/digesetuser/.kube/config' 
- //          sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto --kubeconfig=/home/digesetuser/.kube/config'
+           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment proyecto-itzel --kubeconfig=/home/digesetuser/.kube/config' 
+ //          sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto-itzel --kubeconfig=/home/digesetuser/.kube/config'
           }catch(error)
        {}
     
@@ -83,8 +83,8 @@ pipeline {
       script{
         try{
            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-deployment --kubeconfig=/home/digesetuser/.kube/config'
-    //       sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-deployment --kubeconfig=/home/digesetuser/.kube/config'
+           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-itzel --kubeconfig=/home/digesetuser/.kube/config'
+    //       sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-itzel --kubeconfig=/home/digesetuser/.kube/config'
           }catch(error)
        {}
  
@@ -92,8 +92,8 @@ pipeline {
       script{
         try{
            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment phpmyadmin-deployment --kubeconfig=/home/digesetuser/.kube/config'
-  //         sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment phpmyadmin-deployment --kubeconfig=/home/digesetuser/.kube/config'
+           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment phpmyadmin-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+  //         sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment phpmyadmin-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
           }catch(error)
        {}
     
