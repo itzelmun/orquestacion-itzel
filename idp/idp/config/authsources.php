@@ -13,6 +13,14 @@ $config = [
      * $config['default'] = &$config['your_auth_source'];
      */
 
+
+    'UCOL' => array(
+       'ucol:Ucol',
+      ),
+
+
+
+
     // This is a authentication source which handles admin authentication.
     'admin' => [
         // The default is to use core:AdminPassword, but it can be replaced with

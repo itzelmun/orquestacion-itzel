@@ -464,7 +464,7 @@ $config = [
      *
      * Note that shib13-idp has been deprecated and will be removed in SimpleSAMLphp 2.0.
      */
-    'enable.saml20-idp' => true,
+    'enable.saml20-idp' => false,
     'enable.shib13-idp' => false,
     'enable.adfs-idp' => false,
 
@@ -864,7 +864,7 @@ $config = [
     /*
      * Which theme directory should be used?
      */
-    'theme.use' => 'default',
+    'theme.use' => 'ucol:tema-ucol',
 
     /*
      * Set this option to the text you would like to appear at the header of each page. Set to false if you don't want
