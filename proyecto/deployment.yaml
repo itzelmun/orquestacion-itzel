@@ -1,3 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proyecto-deployment-itzel
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
