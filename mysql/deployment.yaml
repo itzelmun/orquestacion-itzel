@@ -1,8 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proyecto-deployment-itzel
+
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: mysql-secreto-itzel
+  namespace: proyecto-deployment-itzel
 type: Opaque
 data:
   ROOT_PASSWORD: bWktY29udHJhc2XDsWEtc2VndXJh
