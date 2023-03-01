@@ -1,10 +1,14 @@
 <?php
- require_once('config.php');
- echo "SECCION PUBLICA";
- if($saml->isAuthenticated()) //Si el usuario ya esta autenticado en saml
-	{ $atributos= $saml->getAttributes(); //Obtener sus atributos
-	  echo "<br> Existe sesi&oacute;n a nombre de ".$atributos["uNombre"][0]."<br><a href='./privada/'>Ir a secci&oacute;n privada</a>"; //Imprimir el atributo uNombre
-       } 
-	else 
-	 echo "<br>No hay sesi&oacute;n iniciada<br><a href='./privada/'>Iniciar sesi&oacute;n</a>";
+$servername = "148.213.1.131:3306";
+$database = "mydb";
+$username = "root";
+$password = "mi-contraseña-segura";
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $database);
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+echo "Connected successfully";
+mysqli_close($conn);
 ?>
