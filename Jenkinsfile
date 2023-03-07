@@ -18,47 +18,56 @@ pipeline {
             }
         }
 
-        stage('Build image') {
+        stage('Build image app') {
             steps{
-                dir('proyecto') {
+                dir('proyecto-app') {
                     script {
                         dockerImage1 = docker.build dockerimagename1
                     }
                 }
-
-                dir('phpmyadmin') {
-                    script {
-                        dockerImage2 = docker.build dockerimagename2
-                    }
-                }
-
             }
         }
 
-        stage('Pushing Image') {
+        stage('Pushing Image app') {
             environment {
                 registryCredential = 'dockerhubitz'
             }
 
             steps{
-                dir('proyecto') {
+                dir('proyecto app') {
                     script {
                         docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
                             dockerImage1.push("itz")
                         }
                     }
                 }
+            }
+        }
 
-                dir('phpmyadmin') {
-                script {
-                        docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                            dockerImage2.push("itz")
-                        }   
+        stage('Build image phpmyadmin') {
+            steps{
+                dir('phpmyadmin'){
+                    script {
+                        dockerImage2 = docker.build dockerimagename2
                     }
                 }
             }
         }
 
+        stage('Pushing Image phpmyadmin') {
+            environment{
+                    registryCredential = 'dockerhubitz'
+            }
+                steps{
+                    dir('phpmyadmin'){
+                        script {
+                            docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                                dockerImage2.push("itz")
+                            }
+                        }
+                    }
+                }
+        }
                                     //stage('Deploying App to Kubernetes') {
                                     //  steps {
                                     //    script {
@@ -68,7 +77,7 @@ pipeline {
                                     //   }
                                     // }
 
-        stage('Restarting POD'){
+        stage('Restarting POD app'){
             steps{
                 sshagent(['sshsanchez']){
                         sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
@@ -79,7 +88,13 @@ pipeline {
                             //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto-itzel -n snitzel --kubeconfig=/home/digesetuser/.kube/config'
                         }catch(error){}
                     }
+                }
+            }
+        }
 
+        stage('Restarting POD mysql'){
+            steps{
+                sshagent(['sshsanchez']){
                         sh 'cd mysql && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
                     script{
                         try{
@@ -87,8 +102,14 @@ pipeline {
                             sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-deploy-itzel -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
                             //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-deploy-itzel --kubeconfig=/home/digesetuser/.kube/config'
                         }catch(error){}
-                    }   
+                    }
+                }
+            }
+        }   
 
+        stage('Restarting POD phpmyadmin'){
+            steps{
+                sshagent(['sshsanchez']){
                         sh 'cd phpmyadmin && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
                     script{
                         try{
@@ -109,11 +130,11 @@ pipeline {
         }
     }
 }
- def custom_msg(){
-
+    def custom_msg(){
+    
     def JENKINS_URL= "jarvis.ucol.mx:8080"
     def JOB_NAME = env.JOB_NAME
     def BUILD_ID= env.BUILD_ID
     def JENKINS_LOG= " DEPLOY LOG: Job [${env.JOB_NAME}] Logs path: ${JENKINS_URL}/job/${JOB_NAME}/${BUILD_ID}/consoleText"
     return JENKINS_LOG
-}
+    }
