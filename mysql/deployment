@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: proyecto-deployment-itzel
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secreto-itzel
+  namespace: proyecto-deployment-itzel
+type: Opaque
+data:
+  ROOT_PASSWORD: bWktY29udHJhc2XDsWEtc2VndXJh
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-disco-itzel
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment-itzel
+  namespace: proyecto-deployment-itzel
+  labels:
+    app: mysql-deployment-itzel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-deployment-itzel
+  template:
+    metadata:
+      labels:
+        app: mysql-deployment-itzel
+    spec:
+      containers:
+        - name: mysql-deployment-itzel
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: "/var/lib/mysql"
+              subPath: "mysql"
+              name: mysql-disco-itzel
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secreto-itzel
+                  key: ROOT_PASSWORD
+      volumes:
+        - name: mysql-disco-itzel
+          persistentVolumeClaim:
+            claimName: mysql-disco-itzel
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service-itzel
+  namespace: proyecto-deployment-itzel
+spec:
+  selector:
+    app: mysql-service-itzel
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+

@@ -1,14 +1,28 @@
 <?php
-$servername = "148.213.1.131:3306";
-$database = "mydb";
-$username = "root";
-$password = "mi-contraseña-segura";
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $database);
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-echo "Connected successfully";
-mysqli_close($conn);
+	
+
+	$con = mysqli_connect('mysql-service-itzel:3306','root','itzel');
+	
+	if (isset($con)) {
+		
+		echo 'Conectado2'.'<br/>';
+
+		mysqli_select_db($con,'pruebacurso');
+
+		$query = 'select * from pruebacurso';
+		
+		$result = mysqli_query($con,$query);
+		
+		if($result) {
+			while($row = mysqli_fetch_array($result)){
+				$name = $row["col"];
+				echo $name." ";
+			}
+		}
+
+		return;
+	}
+
+	echo 'Sin conexión';
+
 ?>

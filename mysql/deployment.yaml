@@ -1,24 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: proyecto-deployment-itzel
-
+  name: nsitzel
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: mysql-secreto-itzel
-  namespace: proyecto-deployment-itzel
-type: Opaque
-data:
-  ROOT_PASSWORD: bWktY29udHJhc2XDsWEtc2VndXJh
-
----
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mysql-disco-itzel
+  namespace: nsitzel
 spec:
   accessModes:
     - ReadWriteOnce
@@ -26,55 +15,60 @@ spec:
     requests:
       storage: 1Gi
 ---
-
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+  namespace: nsitzel
+type: Opaque
+data:
+  password: aXR6ZWw=
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment-itzel
-  namespace: proyecto-deployment-itzel
-  labels:
-    app: mysql-deployment-itzel
+  name: mysql-deploy-itzel
+  namespace: nsitzel
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql-deployment-itzel
+      app: itzelmysql
   template:
     metadata:
       labels:
-        app: mysql-deployment-itzel
+        app: itzelmysql
     spec:
       containers:
-        - name: mysql-deployment-itzel
+        - name: itzelmysql
           image: mysql:8.0
-          ports:
-            - containerPort: 3306
-          volumeMounts:
-            - mountPath: "/var/lib/mysql"
-              subPath: "mysql"
-              name: mysql-disco-itzel
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secreto-itzel
-                  key: ROOT_PASSWORD
+                  name: my-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: itzelmysql
+          volumeMounts:
+            - name: itzmysql-data
+              mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-disco-itzel
+        - name: itzmysql-data
           persistentVolumeClaim:
             claimName: mysql-disco-itzel
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: mysql-service-itzel
-  namespace: proyecto-deployment-itzel
+  namespace: nsitzel
 spec:
   selector:
-    app: mysql-service-itzel
+    app: itzelmysql
+  type: ClusterIP
   ports:
-  - protocol: TCP
-    port: 3306
-    targetPort: 3306
-
+    - name: itzelmysql
+      port: 3306
+      targetPort: 3306
