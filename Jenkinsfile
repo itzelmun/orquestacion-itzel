@@ -70,7 +70,7 @@ pipeline {
                         sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
                     script{
                         try{
-                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
                             sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment proyecto-itzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
                             //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto-itzel -n snitzel --kubeconfig=/home/digesetuser/.kube/config'
                         }catch(error){}
@@ -80,7 +80,7 @@ pipeline {
                         sh 'cd mysql && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
                     script{
                         try{
-                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
                             sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-deploy-itzel -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
                             //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-deploy-itzel --kubeconfig=/home/digesetuser/.kube/config'
                         }catch(error){}

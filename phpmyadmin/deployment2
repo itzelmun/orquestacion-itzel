@@ -12,14 +12,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: phpmyadmin
+      app: phpmyadmin-itzel
   template:
     metadata:
       labels:
-        app: phpmyadmin
+        app: phpmyadmin-itzel
     spec:
       containers:
-        - name: phpmyadmin
+        - name: phpmyadmin-itzel
           image: itzelmunguia/phpmyadmin:itz
           ports:
             - containerPort: 80
@@ -29,7 +29,7 @@ spec:
             - name: PMA_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
+                  name: my-secret
                   key: password
           volumeMounts:
             - name: sessions
@@ -41,12 +41,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: phpmyadmin-service
+  name: admin-service-itzel
   namespace: nsitzel
 spec:
   type: ClusterIP
   selector:
-    app: phpmyadmin
+    app: phpmyadmin-itzel
   ports:
   - protocol: TCP
     port: 80

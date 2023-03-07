@@ -6,7 +6,7 @@ metadata:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-data-disk
+  name: mysql-disco-itzel
   namespace: nsitzel
 spec:
   accessModes:
@@ -18,7 +18,7 @@ spec:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysql-secrets
+  name: my-secret
   namespace: nsitzel
 type: Opaque
 data:
@@ -33,31 +33,31 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mysql
+      app: itzelmysql
   template:
     metadata:
       labels:
-        app: mysql
+        app: itzelmysql
     spec:
       containers:
-        - name: mysql
-          image: mysql:latest
+        - name: itzelmysql
+          image: mysql:8.0
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mysql-secrets
+                  name: my-secret
                   key: password
           ports:
             - containerPort: 3306
-              name: mysql
+              name: itzelmysql
           volumeMounts:
-            - name: mysql-data
+            - name: itzmysql-data
               mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-data
+        - name: itzmysql-data
           persistentVolumeClaim:
-            claimName: mysql-data-disk
+            claimName: mysql-disco-itzel
 ---
 apiVersion: v1
 kind: Service
@@ -66,9 +66,9 @@ metadata:
   namespace: nsitzel
 spec:
   selector:
-    app: mysql
+    app: itzelmysql
   type: ClusterIP
   ports:
-    - name: mysql
+    - name: itzelmysql
       port: 3306
       targetPort: 3306
