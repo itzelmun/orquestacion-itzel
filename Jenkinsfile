@@ -20,7 +20,7 @@ pipeline {
 
         stage('Build image app') {
             steps{
-                dir('proyecto-app') {
+                dir('proyecto') {
                     script {
                         dockerImage1 = docker.build dockerimagename1
                     }
@@ -34,7 +34,7 @@ pipeline {
             }
 
             steps{
-                dir('proyecto app') {
+                dir('proyecto') {
                     script {
                         docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
                             dockerImage1.push("itz")
