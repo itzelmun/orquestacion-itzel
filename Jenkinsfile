@@ -102,7 +102,7 @@ pipeline {
 
     post{
         success{
-            slackSend channel: 'itzelchannel', color: 'good', failOnError: true, message: "${custom_msg()}", teamDomain: 'universidadde-bea3869', tokenCredentialId: 'slackpass'
+            slackSend channel: 'sanchez', color: 'good', failOnError: true, message: "${custom_msg()}", teamDomain: 'universidadde-bea3869', tokenCredentialId: 'slackpass'
         }
     }
 }
