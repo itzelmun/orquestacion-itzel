@@ -1,123 +1,116 @@
 pipeline {
 
-  environment {
-    dockerimagename1 = "itzelmunguia/proyecto:itz"
-    dockerimagename2 = "itzelmunguia/phpmyadmin:itz"
-    dockerImage1 = ""
-    dockerImage2= ""
+    environment {
+        dockerimagename1 = "itzelmunguia/proyecto:itz"
+        dockerimagename2 = "itzelmunguia/phpmyadmin:itz"
+        dockerImage1 = ""
+        dockerImage2= ""
 
-  }
-
-  agent any
-
-
-  stages {
-
-    stage('Checkout Source') { 
-      steps {
-        git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
-      }
     }
 
-    stage('Build image') {
-      steps{
-	dir('proyecto') {
-         script {        
-	   dockerImage1 = docker.build dockerimagename1
-          }
-        }
-	
-	dir('phpmyadmin') {
-	 script {
-           dockerImage2 = docker.build dockerimagename2
-          }
+    agent any
+
+    stages {
+
+        stage('Checkout Source') {
+            steps {
+                git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
+            }
         }
 
-      }
-   }
+        stage('Build image') {
+            steps{
+                dir('proyecto') {
+                    script {
+                        dockerImage1 = docker.build dockerimagename1
+                    }
+                }
 
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'dockerhubitz'
-           }
-      steps{
-	dir('proyecto') {
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage1.push("itz")
-          }
-        }
-      }
+                dir('phpmyadmin') {
+                    script {
+                        dockerImage2 = docker.build dockerimagename2
+                    }
+                }
 
-        dir('phpmyadmin') {
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage2.push("itz")
-          }
+            }
         }
-      }
+
+        stage('Pushing Image') {
+            environment {
+                registryCredential = 'dockerhubitz'
+            }
+
+            steps{
+                dir('proyecto') {
+                    script {
+                        docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                            dockerImage1.push("itz")
+                        }
+                    }
+                }
+
+                dir('phpmyadmin') {
+                script {
+                        docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                            dockerImage2.push("itz")
+                        }   
+                    }
+                }
+            }
+        }
+
+                                    //stage('Deploying App to Kubernetes') {
+                                    //  steps {
+                                    //    script {
+                                    //      //kubernetesDeploy(configs: "deployment-service-simplesaml.yaml", kubeconfigId: "kuberkey")
+                                    //       //sh 'microk8s.kubectl rollout restart prueba-gha'
+                                    //     }
+                                    //   }
+                                    // }
+
+        stage('Restarting POD'){
+            steps{
+                sshagent(['sshsanchez']){
+                        sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
+                    script{
+                        try{
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment proyecto-itzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
+                            //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto-itzel -n snitzel --kubeconfig=/home/digesetuser/.kube/config'
+                        }catch(error){}
+                    }
+
+                        sh 'cd mysql && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
+                    script{
+                        try{
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-deploy-itzel -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                            //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-deploy-itzel --kubeconfig=/home/digesetuser/.kube/config'
+                        }catch(error){}
+                    }   
+
+                        sh 'cd phpmyadmin && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
+                    script{
+                        try{
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
+                            sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment adminitzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
+                            //sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment adminitzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
+                        }catch(error){}
+                    }
+
+                }
+            }
+        }   
     }
-  }
-
-   //stage('Deploying App to Kubernetes') {
-   //  steps {
-   //    script {
-   //      //kubernetesDeploy(configs: "deployment-service-simplesaml.yaml", kubeconfigId: "kuberkey")
-   //       //sh 'microk8s.kubectl rollout restart prueba-gha'
-   //     }        
-   //   }
-   // }
-
-   stage('Restarting POD'){
-   steps{
-    sshagent(['sshsanchez'])
-    {
-     sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
-      script{
-        try{
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment proyecto-itzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config' 
- //          sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment proyecto-itzel -n snitzel --kubeconfig=/home/digesetuser/.kube/config'
-          }catch(error)
-       {}
-
-     sh 'cd mysql && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
-      script{
-        try{
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment mysql-deploy-itzel -n proyecto-deployment-itzel --kubeconfig=/home/digesetuser/.kube/>
-    //       sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment mysql-deploy-itzel --kubeconfig=/home/digesetuser/.kube/config'
-          }catch(error)
-       {}
-
-    sh 'cd phpmyadmin && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
-      script{
-        try{
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl apply -f deployment.yaml -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
-           sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout restart deployment adminitzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
-  //         sh 'ssh digesetuser@148.213.1.131 microk8s.kubectl rollout status deployment adminitzel -n nsitzel --kubeconfig=/home/digesetuser/.kube/config'
-          }catch(error)
-       {}
-          
-     }
-    }
-  }
- }
 }
-}
-}
-}
-
- post
-    {
+    post{
         success{
-            slackSend channel: 'canal-de-itzel', color: 'good', failOnError: true, message: "${custom_msg()}", teamDomain: 'universidadde-bea3869', tokenCredentialId: 'slackpass' 
+            slackSend channel: 'canal-de-itzel', color: 'good', failOnError: true, message: "${custom_msg()}", teamDomain: 'universidadde-bea3869', tokenCredentialId: 'slackpass'
         }
     }
-}
 
-def custom_msg()
-{
+ def custom_msg(){
+
     def JENKINS_URL= "jarvis.ucol.mx:8080"
     def JOB_NAME = env.JOB_NAME
     def BUILD_ID= env.BUILD_ID
