@@ -12,11 +12,27 @@ pipeline {
 
     stages {
 
-        stage('Checkout Source') {
-            steps {
-                git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
+	//sonarqube
+	node{
+       	    stage('Checkout Source') {
+                steps {
+                    git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
+                    }
             }
-        }
+	    stage('sonarqube analysis'){	
+	      def scannerHome = tool 'scanme';
+	      withSonarQubeEnv('scanme'){
+	      	 sh "${scannerHome}/bin/sonar-scanner \
+      		 -D sonar.login=itzel \
+      		 -D sonar.password=itzeldevops \
+      		 -D sonar.projectKey=sonarqubetest \
+      		 -D sonar.exclusions=vendor/**,resources/**,**/*.java \
+      		 -D sonar.host.url=http://148.213.1.130:9000/"
+	      }
+  	    }
+	}
+         
+
 
         stage('Build image app') {
             steps{
