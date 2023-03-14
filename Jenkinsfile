@@ -13,7 +13,7 @@ pipeline {
     stages {
 
 	//sonarqube
-	node{
+	
        	    stage('Checkout Source') {
                 steps {
                     git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
@@ -30,7 +30,7 @@ pipeline {
       		 -D sonar.host.url=http://148.213.1.130:9000/"
 	      }
   	    }
-	}
+	
          
 
 
