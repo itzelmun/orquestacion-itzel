@@ -21,7 +21,7 @@ pipeline {
        stage('Sonarqube scanner') {
            steps {
                  withSonarQubeEnv(installationName: 'scanme'){
-		   sh './mvnw clean org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+		   sh 'org.jenkins-ci.plugins:sonar:2.6.1'
 		 }
             }
        }
