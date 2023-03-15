@@ -20,8 +20,11 @@ pipeline {
 	         
        stage('Sonarqube scanner') {
            steps {
+   		 def scannerHome = tool 'SonarScanner 4.0';
                  withSonarQubeEnv(installationName: 'scanme'){
-		   sh 'org.jenkins-ci.plugins:sonar:2.6.1'
+		  // sh 'org.jenkins-ci.plugins:sonar:2.6.1'
+		  sh "${scannerHome}/bin/sonar-scanner"
+		   def scannerHome = tool 'SonarScanner 4.0';
 		 }
             }
        }
