@@ -18,17 +18,14 @@ pipeline {
                  }
        }
 	         
-       stage('Sonarqube scanner') {
-           steps {
-   		 def scannerHome = tool 'SonarScanner 4.0';
-                 withSonarQubeEnv(installationName: 'scanme'){
-		  // sh 'org.jenkins-ci.plugins:sonar:2.6.1'
-		  sh "${scannerHome}/bin/sonar-scanner"
-		   def scannerHome = tool 'SonarScanner 4.0';
-		 }
-            }
-       }
-   
+       stage('SonarQube analysis') {
+		steps{
+			script{
+				def scannerHome = tool 'SonarRunner_3.3.0';
+			}
+			withSonarQubeEnv('My SonarQube Server') {
+			sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
+			}
 
 
         stage('Build image app') {
