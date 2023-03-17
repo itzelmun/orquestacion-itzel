@@ -5,7 +5,6 @@ pipeline {
         dockerimagename2 = "itzelmunguia/phpmyadmin:itz"
         dockerImage1 = ""
         dockerImage2= ""
-
     }
 
     agent any
