@@ -17,16 +17,6 @@ pipeline {
                  }
        }
 	         
-       stage('SonarQube analysis') {
-		steps{
-			script{
-				def scannerHome = tool 'SonarRunner_3.3.0';
-			}
-			withSonarQubeEnv('My SonarQube Server') {
-			sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
-			}
-		}
-	}
 
 
         stage('Build image app') {
@@ -74,6 +64,17 @@ pipeline {
                                     //     }
                                     //   }
                                     // }
+
+ stage('SonarQube analysis') {
+		steps{
+			script{
+				def scannerHome = tool 'SonarRunner_3.3.0';
+			}
+			withSonarQubeEnv('My SonarQube Server') {
+			sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
+			}
+		}
+	}
 
         stage('Restarting POD app'){
             steps{
