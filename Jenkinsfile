@@ -65,16 +65,16 @@ pipeline {
                                     //   }
                                     // }
 
- stage('SonarQube analysis') {
-		steps{
-			script{
-				def scannerHome = tool 'SonarRunner_3.3.0';
-			}
-			withSonarQubeEnv('My SonarQube Server') {
-			sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
-			}
-		}
-	}
+ //stage('SonarQube analysis') {
+		//steps{
+			//script{
+				//def scannerHome = tool 'SonarRunner_3.3.0';
+			//}
+			//withSonarQubeEnv('My SonarQube Server') {
+			//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
+			//}
+		//}
+	//}
 
         stage('Restarting POD app'){
             steps{
@@ -111,6 +111,30 @@ pipeline {
             }
         }   
     }
+
+	stage('SonarQube analysis') {
+      steps {
+        sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
+        // Run the SonarQube Scanner container inside the Jenkins container and send the result to the server
+        withCredentials([string(credentialsId: 'sonarqubeGlobal', variable: 'SONAR_TOKEN')]) {
+          sh 'docker run --rm \
+            --network host \
+            -v /var/jenkins_home/workspace/orquestacion-itzel/app:/usr/src \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.host.url=http://scanner.ucol.mx:9000 \
+            -Dsonar.login=sqa_81e6208efcb88891bc709a7dfc94d303c91b4f87 \
+            -Dsonar.projectKey=app \
+            -Dsonar.sources=. \
+            -Dsonar.projectName=proyecto \
+            -Dsonar.projectVersion=1.0 \
+            -Dsonar.projectDescription=proyecto \
+            -Dsonar.language=php \
+            -Dsonar.php.coverage.reportPaths=coverage.xml \
+            -Dsonar.php.tests.reportPath=phpunit.xml'
+        }
+      }
+    }
+
 
     post{
         success{
