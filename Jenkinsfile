@@ -76,6 +76,32 @@ pipeline {
 		//}
 	//}
 
+
+
+	stage('SonarQube analysis') {
+     	 steps {
+        	sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
+        	// Run the SonarQube Scanner container inside the Jenkins container and send the result to the server
+        	withCredentials([string(credentialsId: 'sonarqubeGlobal', variable: 'SONAR_TOKEN')]) {
+          sh 'docker run --rm \
+            --network host \
+            -v /var/jenkins_home/workspace/orquestacion-itzel/app:/usr/src \
+            sonarsource/sonar-scanner-cli \
+            -Dsonar.host.url=http://148.213.1.130:9000 \
+            -Dsonar.login=sqa_81e6208efcb88891bc709a7dfc94d303c91b4f87 \
+            -Dsonar.projectKey=proyecto \
+            -Dsonar.sources=. \
+            -Dsonar.projectName=proyecto \
+            -Dsonar.projectVersion=1.0 \
+            -Dsonar.projectDescription=proyecto \
+            -Dsonar.language=php \
+            -Dsonar.php.coverage.reportPaths=coverage.xml \
+            -Dsonar.php.tests.reportPath=phpunit.xml'
+        }
+      }
+    }
+
+
         stage('Restarting POD app'){
             steps{
                 sshagent(['sshsanchez']){
@@ -112,28 +138,7 @@ pipeline {
         }   
     }
 
-	stage('SonarQube analysis') {
-      steps {
-        sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
-        // Run the SonarQube Scanner container inside the Jenkins container and send the result to the server
-        withCredentials([string(credentialsId: 'sonarqubeGlobal', variable: 'SONAR_TOKEN')]) {
-          sh 'docker run --rm \
-            --network host \
-            -v /var/jenkins_home/workspace/orquestacion-itzel/app:/usr/src \
-            sonarsource/sonar-scanner-cli \
-            -Dsonar.host.url=http://scanner.ucol.mx:9000 \
-            -Dsonar.login=sqa_81e6208efcb88891bc709a7dfc94d303c91b4f87 \
-            -Dsonar.projectKey=app \
-            -Dsonar.sources=. \
-            -Dsonar.projectName=proyecto \
-            -Dsonar.projectVersion=1.0 \
-            -Dsonar.projectDescription=proyecto \
-            -Dsonar.language=php \
-            -Dsonar.php.coverage.reportPaths=coverage.xml \
-            -Dsonar.php.tests.reportPath=phpunit.xml'
-        }
-      }
-    }
+	
 
 
     post{
