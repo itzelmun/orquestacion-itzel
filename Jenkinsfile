@@ -7,13 +7,11 @@ pipeline {
         dockerImage2= ""
     }
 
-    agent any
-
-     /*agent any
+      agent any
 
     stages {
 
-       stage('Checkout Source') {
+       /*stage('Checkout Source') {
            steps {
                  git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
                  }
@@ -35,7 +33,7 @@ pipeline {
             sh "git merge --no-ff origin/${env.BRANCH_NAME}"
         }
     }
-//} 
+//}
 
 
         stage('Build image app') {
