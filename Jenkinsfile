@@ -1,5 +1,4 @@
 pipeline {
-    agent any
 
     environment {
         dockerimagename1 = "itzelmunguia/proyecto:itz"
@@ -7,6 +6,8 @@ pipeline {
         dockerImage1 = ""
         dockerImage2 = ""
     }
+
+    agent any
 
     stages {
         stage('Checkout source') {
@@ -18,7 +19,8 @@ pipeline {
                           submoduleCfg: [],
                           userRemoteConfigs: [[url: 'https://github.com/itzelmun/orquestacion-itzel.git']]],
                         poll: false,
-                        scmName: '') {
+                        scmName: ''
+                        ) {
                     sh "git checkout ${env.BRANCH_NAME}"
                     sh "git merge --no-ff origin/${env.BRANCH_NAME}"
                 }
@@ -42,12 +44,12 @@ pipeline {
             steps {
                 dir('proyecto') {
                     script {
-                        dockerImage1 = docker.build dockerimagename1
+                        dockerImage1 = docker.build(dockerimagename1)
                     }
                 }
                 dir('phpmyadmin') {
                     script {
-                        dockerImage2 = docker.build dockerimagename2
+                        dockerImage2 = docker.build(dockerimagename2)
                     }
                 }
             }
@@ -61,14 +63,14 @@ pipeline {
             steps {
                 dir('proyecto') {
                     script {
-                        docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                        docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                             dockerImage1.push("itz")
                         }
                     }
                 }
                 dir('phpmyadmin') {
                     script {
-                        docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
+                        docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                             dockerImage2.push("itz")
                         }
                     }
@@ -79,13 +81,14 @@ pipeline {
         stage('SonarQube analysis') {
             steps {
                 sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
+                // Run the SonarQube Scanner container inside the Jenkins container and send the result to the server
                 withCredentials([string(credentialsId: 'sonarqubeGlobal', variable: 'SONAR_TOKEN')]) {
                     sh 'docker run --rm \
                         --network host \
                         -v /var/jenkins_home/workspace/orquestacion-itzel/app:/usr/src \
                         sonarsource/sonar-scanner-cli \
                         -Dsonar.host.url=http://148.213.1.130:9000 \
-                        -Dsonar.login=$SONAR_TOKEN \
+                        -Dsonar.login=sqa_81e6208efcb88891bc709a7dfc94d303c91b4f87 \
                         -Dsonar.projectKey=proyecto \
                         -Dsonar.sources=. \
                         -Dsonar.projectName=proyecto \
@@ -97,7 +100,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Restarting POD app'){
             steps{
