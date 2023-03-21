@@ -9,6 +9,8 @@ pipeline {
 
     agent any
 
+     /*agent any
+
     stages {
 
        stage('Checkout Source') {
@@ -16,7 +18,24 @@ pipeline {
                  git credentialsId: 'github_credential', url: 'https://github.com/itzelmun/orquestacion-itzel.git', branch:'main'
                  }
        }
-	         
+	        */
+
+       // node {
+    stage('Checkout source') {
+        checkout([$class: 'GitSCM',
+                  branches: [[name: '*/main']],
+                  doGenerateSubmoduleConfigurations: false,
+                  extensions: [[$class: 'DisableRemotePoll']],
+                  submoduleCfg: [],
+                  userRemoteConfigs: [[url: 'https://github.com/itzelmun/orquestacion-itzel.git']]],
+                poll: false,
+                scmName: ''
+                ) {
+            sh "git checkout ${env.BRANCH_NAME}"
+            sh "git merge --no-ff origin/${env.BRANCH_NAME}"
+        }
+    }
+//} 
 
 
         stage('Build image app') {
