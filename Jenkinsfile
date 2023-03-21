@@ -21,7 +21,7 @@ pipeline {
        // node {
     stage('Checkout source') {
         checkout([$class: 'GitSCM',
-                  branches: [[name: '*/main']],
+                  branches: [[name: 'main']],
                   doGenerateSubmoduleConfigurations: false,
                   extensions: [[$class: 'DisableRemotePoll']],
                   submoduleCfg: [],
@@ -34,6 +34,18 @@ pipeline {
         }
     }
 //}
+
+stage("Quality Gate"){
+    steps {
+        script {
+            timeout(time: 1, unit: 'HOURS') {
+                def qg = waitForQualityGate()
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+            }
+        }
+    }
+}
 
 
         stage('Build image app') {
