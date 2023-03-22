@@ -5,6 +5,9 @@ pipeline {
         dockerimagename2 = "itzelmunguia/phpmyadmin:itz"
         dockerImage1 = ""
         dockerImage2= ""
+        SONAR_SCANNER_HOME = "/opt/sonar-scanner"
+        PATH = "${env.SONAR_SCANNER_HOME}/bin:${env.PATH}"
+  }
     }
 
     agent any
@@ -17,7 +20,22 @@ pipeline {
                  }
        }
 	        
-
+        stage('Static Code Analysis') {
+        steps {
+            withSonarQubeEnv('sonarqube') {
+            sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner \
+                -Dsonar.projectKey=proyecto \
+                -Dsonar.projectName=proyecto \
+                -Dsonar.projectVersion=1.0 \
+                -Dsonar.sources=proyecto \
+                -Dsonar.language=php \
+                -Dsonar.login=${sonarqubeGlobal} \
+                -Dsonar.host.url=http://scanner.ucol.mx:9000 \
+                -Dsonar.report.export.path=sonar-report.json"
+            }
+        }
+        }   
+  
         stage('Build image app') {
             steps{
                 dir('proyecto') {
@@ -76,7 +94,7 @@ pipeline {
 	//}
 
 
-
+/*
 	stage('SonarQube analysis') {
      	 steps {
         	sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
@@ -99,7 +117,7 @@ pipeline {
         }
       }
     }
-
+*/
 
         stage('Restarting POD app'){
             steps{
