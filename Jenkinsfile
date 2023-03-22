@@ -7,8 +7,8 @@ pipeline {
         dockerImage2= ""
         SONAR_SCANNER_HOME = "/opt/sonar-scanner"
         PATH = "${env.SONAR_SCANNER_HOME}/bin:${env.PATH}"
-  }
     }
+    
 
     agent any
 
@@ -21,19 +21,19 @@ pipeline {
        }
 	        
         stage('Static Code Analysis') {
-        steps {
-            withSonarQubeEnv('sonarqube') {
-            sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                -Dsonar.projectKey=proyecto \
-                -Dsonar.projectName=proyecto \
-                -Dsonar.projectVersion=1.0 \
-                -Dsonar.sources=proyecto \
-                -Dsonar.language=php \
-                -Dsonar.login=${sonarqubeGlobal} \
-                -Dsonar.host.url=http://scanner.ucol.mx:9000 \
-                -Dsonar.report.export.path=sonar-report.json"
+            steps {
+                withSonarQubeEnv('sonarqube') {
+                    sh "${env.SONAR_SCANNER_HOME}/bin/sonar-scanner \
+                    -Dsonar.projectKey=proyecto \
+                    -Dsonar.projectName=proyecto \
+                    -Dsonar.projectVersion=1.0 \
+                    -Dsonar.sources=proyecto \
+                    -Dsonar.language=php \
+                    -Dsonar.login=${sonarqubeGlobal} \
+                    -Dsonar.host.url=http://scanner.ucol.mx:9000 \
+                    -Dsonar.report.export.path=sonar-report.json"
+                }
             }
-        }
         }   
   
         stage('Build image app') {
@@ -73,53 +73,8 @@ pipeline {
                 }
             }
         }
-                                    //stage('Deploying App to Kubernetes') {
-                                    //  steps {
-                                    //    script {
-                                    //      //kubernetesDeploy(configs: "deployment-service-simplesaml.yaml", kubeconfigId: "kuberkey")
-                                    //       //sh 'microk8s.kubectl rollout restart prueba-gha'
-                                    //     }
-                                    //   }
-                                    // }
-
- //stage('SonarQube analysis') {
-		//steps{
-			//script{
-				//def scannerHome = tool 'SonarRunner_3.3.0';
-			//}
-			//withSonarQubeEnv('My SonarQube Server') {
-			//sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=sonarqubetest -Dsonar.sources=. -Dsonar.login=squ_31e8e6b3a1dee001de6678b6555b5edf4f46e704"
-			//}
-		//}
-	//}
 
 
-/*
-	stage('SonarQube analysis') {
-     	 steps {
-        	sh "cd /var/jenkins_home/workspace/orquestacion-itzel/"
-        	// Run the SonarQube Scanner container inside the Jenkins container and send the result to the server
-        	withCredentials([string(credentialsId: 'sonarqubeGlobal', variable: 'SONAR_TOKEN')]) {
-          sh 'docker run --rm \
-            --network host \
-            -v /var/jenkins_home/workspace/orquestacion-itzel/app:/usr/src \
-            sonarsource/sonar-scanner-cli \
-            -Dsonar.host.url=http://148.213.1.130:9000 \
-            -Dsonar.login=sqa_81e6208efcb88891bc709a7dfc94d303c91b4f87 \
-            -Dsonar.projectKey=proyecto \
-            -Dsonar.sources=. \
-            -Dsonar.projectName=proyecto \
-            -Dsonar.projectVersion=1.0 \
-            -Dsonar.projectDescription=proyecto \
-            -Dsonar.language=php \
-            -Dsonar.php.coverage.reportPaths=coverage.xml \
-            -Dsonar.php.tests.reportPath=phpunit.xml'
-        }
-      }
-    }
-*/
-
-        stage('Restarting POD app'){
             steps{
                 sshagent(['sshsanchez']){
                         sh 'cd proyecto && scp -r -o StrictHostKeyChecking=no deployment.yaml digesetuser@148.213.1.131:/home/digesetuser/'
@@ -152,7 +107,7 @@ pipeline {
 
                 }
             }
-        }   
+           
     }
 
 	
